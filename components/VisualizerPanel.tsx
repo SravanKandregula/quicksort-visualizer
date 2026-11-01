@@ -18,6 +18,7 @@ import {
   ChevronLeft,
   ChevronRight,
   RotateCcw,
+  Info,
 } from 'lucide-react';
 
 interface VisualizerPanelProps {
@@ -61,10 +62,10 @@ export const VisualizerPanel: React.FC<VisualizerPanelProps> = ({
 
   return (
     <div className="space-y-6">
-      {/* 1. Dynamic Step Explanation Banner */}
-      <div className="p-5 bg-white border border-ink/20 rounded-sm shadow-subtle space-y-2.5">
+      {/* 1. Dynamic Step Explanation & Subarray Layout Banner */}
+      <div className="p-4 sm:p-5 bg-white border border-ink/20 rounded-sm shadow-subtle space-y-3">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-ink/10 pb-2.5">
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-2.5 flex-wrap">
             <span className="px-2.5 py-1 bg-ink text-white text-xs font-mono font-bold uppercase tracking-wider rounded-sm">
               Step {currentStepIndex + 1} of {totalSteps}
             </span>
@@ -73,7 +74,7 @@ export const VisualizerPanel: React.FC<VisualizerPanelProps> = ({
             </span>
           </div>
 
-          <div className="flex items-center gap-4 text-xs font-mono text-ink/70">
+          <div className="flex items-center gap-3 sm:gap-4 text-xs font-mono text-ink/70 flex-wrap">
             <span>
               Synced C Line: <strong className="text-ink">#{step.codeLine}</strong>
             </span>
@@ -81,12 +82,84 @@ export const VisualizerPanel: React.FC<VisualizerPanelProps> = ({
             <span>
               Subarray: <strong>[{step.low} .. {step.high}]</strong>
             </span>
+            <span className="hidden md:inline text-[11px] text-ink/40">
+              Use [←] and [→] arrow keys
+            </span>
           </div>
         </div>
 
-        <p className="text-base md:text-lg text-ink font-medium leading-relaxed">
-          {step.explanation}
-        </p>
+        {/* Dynamic Explanation + Partition Subarray Layout placed in the empty space beside it */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
+          {/* Left: Step Explanation */}
+          <div className={step.partitionRange ? 'lg:col-span-5' : 'lg:col-span-12'}>
+            <p className="text-base sm:text-lg text-ink font-medium leading-relaxed">
+              {step.explanation}
+            </p>
+          </div>
+
+          {/* Right: Partition Subarray Layout */}
+          {step.partitionRange && (
+            <div className="lg:col-span-7 p-3 bg-ink/[0.02] border border-ink/15 rounded-sm">
+              <div className="flex items-center justify-between text-xs font-bold uppercase tracking-wider text-ink mb-2">
+                <span className="flex items-center gap-1.5 font-mono">
+                  <Info className="w-3.5 h-3.5" />
+                  Partition Subarray Layout
+                </span>
+                <span className="text-[11px] font-mono text-ink/60 font-normal">
+                  [{step.partitionRange.low} .. {step.partitionRange.high}]
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs font-mono">
+                <div className="p-2 border border-ink/15 bg-white rounded-sm">
+                  <div className="flex items-center justify-between font-bold text-[11px] text-ink">
+                    <span>Left (≤ pivot)</span>
+                    <span className="text-[10px]">
+                      {step.leftPartitionRange
+                        ? `[${step.leftPartitionRange.low} .. ${step.leftPartitionRange.high}]`
+                        : 'Empty'}
+                    </span>
+                  </div>
+                  <p className="text-[10px] text-ink/70 mt-1 font-sans leading-tight">
+                    {step.leftPartitionRange
+                      ? `Elements smaller than or equal to pivot.`
+                      : `No smaller elements in branch.`}
+                  </p>
+                </div>
+
+                <div className="p-2 border border-ink bg-ink text-white rounded-sm">
+                  <div className="flex items-center justify-between font-bold text-[11px]">
+                    <span>Pivot Element</span>
+                    <span className="text-[10px]">
+                      {step.pivotIndex !== null ? `Index [${step.pivotIndex}]` : 'N/A'}
+                    </span>
+                  </div>
+                  <p className="text-[10px] text-white/80 mt-1 font-sans leading-tight">
+                    {step.pivot !== null
+                      ? `Value = ${step.pivot}. Locked in place.`
+                      : 'Pivot active.'}
+                  </p>
+                </div>
+
+                <div className="p-2 border border-ink/15 bg-white rounded-sm">
+                  <div className="flex items-center justify-between font-bold text-[11px] text-ink">
+                    <span>Right (≥ pivot)</span>
+                    <span className="text-[10px]">
+                      {step.rightPartitionRange
+                        ? `[${step.rightPartitionRange.low} .. ${step.rightPartitionRange.high}]`
+                        : 'Empty'}
+                    </span>
+                  </div>
+                  <p className="text-[10px] text-ink/70 mt-1 font-sans leading-tight">
+                    {step.rightPartitionRange
+                      ? `Elements larger than or equal to pivot.`
+                      : `No larger elements in branch.`}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* 2. Visual Representation Workspace (Left: Array, Right: C Code) */}

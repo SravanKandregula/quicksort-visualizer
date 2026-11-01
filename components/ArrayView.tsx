@@ -1,7 +1,7 @@
 'use strict';
 import React from 'react';
 import { ExecutionStep } from '../lib/quicksort/types';
-import { ArrowUpDown, Check, Info } from 'lucide-react';
+import { ArrowUpDown, Check } from 'lucide-react';
 import { ConditionLogicCard } from './ConditionLogicCard';
 
 interface ArrayViewProps {
@@ -20,7 +20,6 @@ export const ArrayView: React.FC<ArrayViewProps> = ({ step }) => {
     comparingIndices,
     swappingIndices,
     finalizedIndices,
-    partitionRange,
     leftPartitionRange,
     rightPartitionRange,
   } = step;
@@ -193,67 +192,6 @@ export const ArrayView: React.FC<ArrayViewProps> = ({ step }) => {
           })}
         </div>
       </div>
-
-      {/* Partition Subarray Layout */}
-      {partitionRange && (
-        <div className="p-3.5 bg-ink/[0.02] border border-ink/15 rounded-sm">
-          <div className="flex items-center justify-between text-xs font-bold uppercase tracking-wider text-ink mb-2">
-            <span className="flex items-center gap-1.5">
-              <Info className="w-3.5 h-3.5" />
-              Partition Subarray Layout
-            </span>
-            <span className="text-[11px] font-mono text-ink/60 font-normal">
-              [{partitionRange.low} .. {partitionRange.high}]
-            </span>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5 text-xs font-mono">
-            <div className="p-2.5 border border-ink/15 bg-white rounded-sm">
-              <div className="flex items-center justify-between font-bold text-[11px] text-ink">
-                <span>Left Subarray (≤ pivot)</span>
-                <span>
-                  {leftPartitionRange
-                    ? `[${leftPartitionRange.low} .. ${leftPartitionRange.high}]`
-                    : 'Empty'}
-                </span>
-              </div>
-              <p className="text-[11px] text-ink/70 mt-1 font-sans">
-                {leftPartitionRange
-                  ? `Elements smaller than or equal to the pivot.`
-                  : `No smaller elements in this branch.`}
-              </p>
-            </div>
-
-            <div className="p-2.5 border border-ink bg-ink text-white rounded-sm">
-              <div className="flex items-center justify-between font-bold text-[11px]">
-                <span>Pivot Element</span>
-                <span>{pivotIndex !== null ? `Index [${pivotIndex}]` : 'N/A'}</span>
-              </div>
-              <p className="text-[11px] text-white/80 mt-1 font-sans">
-                {pivot !== null
-                  ? `Value = ${pivot}. Locked in place.`
-                  : 'Pivot is being selected.'}
-              </p>
-            </div>
-
-            <div className="p-2.5 border border-ink/15 bg-white rounded-sm">
-              <div className="flex items-center justify-between font-bold text-[11px] text-ink">
-                <span>Right Subarray (≥ pivot)</span>
-                <span>
-                  {rightPartitionRange
-                    ? `[${rightPartitionRange.low} .. ${rightPartitionRange.high}]`
-                    : 'Empty'}
-                </span>
-              </div>
-              <p className="text-[11px] text-ink/70 mt-1 font-sans">
-                {rightPartitionRange
-                  ? `Elements larger than or equal to the pivot.`
-                  : `No larger elements in this branch.`}
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Visual State Legend */}
       <div className="pt-2 border-t border-ink/10">
