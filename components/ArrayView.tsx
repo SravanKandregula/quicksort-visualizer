@@ -2,6 +2,7 @@
 import React from 'react';
 import { ExecutionStep } from '../lib/quicksort/types';
 import { ArrowUpDown, Check, Info } from 'lucide-react';
+import { ConditionLogicCard } from './ConditionLogicCard';
 
 interface ArrayViewProps {
   step: ExecutionStep;
@@ -297,6 +298,9 @@ export const ArrayView: React.FC<ArrayViewProps> = ({ step }) => {
           </div>
         </div>
       </div>
+
+      {/* Live Condition & Decision Logic (eg: i < pivot && i < high so i++;) */}
+      <ConditionLogicCard step={step} />
     </div>
   );
 };
