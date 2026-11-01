@@ -15,20 +15,31 @@ export const CodeView: React.FC<CodeViewProps> = ({ strategy, step }) => {
   const activeLineRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Auto-scroll the active line inside the container without scrolling the page window
+  // Keep the highlighted code line visible on track without jumping or auto-scrolling to the bottom
   useEffect(() => {
     if (activeLineRef.current && containerRef.current) {
       const container = containerRef.current;
       const element = activeLineRef.current;
-      const elemTop = element.offsetTop;
-      const elemBottom = elemTop + element.offsetHeight;
-      const contTop = container.scrollTop;
-      const contBottom = contTop + container.clientHeight;
 
-      if (elemTop < contTop) {
-        container.scrollTo({ top: Math.max(0, elemTop - 12), behavior: 'smooth' });
-      } else if (elemBottom > contBottom) {
-        container.scrollTo({ top: elemBottom - container.clientHeight + 12, behavior: 'smooth' });
+      const containerRect = container.getBoundingClientRect();
+      const elementRect = element.getBoundingClientRect();
+
+      // Distance of active line relative to container's visible box
+      const distanceToTop = elementRect.top - containerRect.top;
+      const distanceToBottom = containerRect.bottom - elementRect.bottom;
+
+      // Only scroll if the active line is outside or approaching the edges of the visible code box
+      if (distanceToTop < 35 || distanceToBottom < 35) {
+        const targetScrollTop =
+          container.scrollTop +
+          distanceToTop -
+          container.clientHeight / 2 +
+          elementRect.height / 2;
+
+        container.scrollTo({
+          top: Math.max(0, targetScrollTop),
+          behavior: 'smooth',
+        });
       }
     }
   }, [activeLine]);
@@ -109,7 +120,7 @@ export const CodeView: React.FC<CodeViewProps> = ({ strategy, step }) => {
       {/* Code Listing */}
       <div
         ref={containerRef}
-        className="flex-1 overflow-y-auto max-h-[460px] border border-ink/20 bg-white rounded-sm font-mono text-xs leading-relaxed"
+        className="relative flex-1 overflow-y-auto max-h-[460px] border border-ink/20 bg-white rounded-sm font-mono text-xs leading-relaxed"
       >
         <div className="divide-y divide-ink/5">
           {codeLines.map((lineObj) => {
