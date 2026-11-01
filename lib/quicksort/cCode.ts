@@ -1,0 +1,122 @@
+import { CSourceCodeLine, PivotStrategy } from './types';
+
+export const C_CODE_MEDIAN_OF_THREE: CSourceCodeLine[] = [
+  { lineNum: 1, code: 'int partition(int ar[], int low, int high) {' },
+  { lineNum: 2, code: '    int tmp;' },
+  { lineNum: 3, code: '    int mid = (low + high) / 2;' },
+  { lineNum: 4, code: '    /* Find Median of Three */' },
+  { lineNum: 5, code: '    if(ar[low] > ar[mid]) {' },
+  { lineNum: 6, code: '        tmp = ar[low]; ar[low] = ar[mid]; ar[mid] = tmp;' },
+  { lineNum: 7, code: '    }' },
+  { lineNum: 8, code: '    if(ar[low] > ar[high]) {' },
+  { lineNum: 9, code: '        tmp = ar[low]; ar[low] = ar[high]; ar[high] = tmp;' },
+  { lineNum: 10, code: '    }' },
+  { lineNum: 11, code: '    if(ar[mid] > ar[high]) {' },
+  { lineNum: 12, code: '        tmp = ar[mid]; ar[mid] = ar[high]; ar[high] = tmp;' },
+  { lineNum: 13, code: '    }' },
+  { lineNum: 14, code: '    /* Place median pivot at low */' },
+  { lineNum: 15, code: '    tmp = ar[low]; ar[low] = ar[mid]; ar[mid] = tmp;' },
+  { lineNum: 16, code: '    int pi = ar[low];' },
+  { lineNum: 17, code: '    int i = low + 1;' },
+  { lineNum: 18, code: '    int j = high;' },
+  { lineNum: 19, code: '    while(i <= j) {' },
+  { lineNum: 20, code: '        while((ar[i] < pi) && (i < high))' },
+  { lineNum: 21, code: '            i++;' },
+  { lineNum: 22, code: '        while(ar[j] > pi)' },
+  { lineNum: 23, code: '            j--;' },
+  { lineNum: 24, code: '        if(i < j) {' },
+  { lineNum: 25, code: '            tmp = ar[i]; ar[i] = ar[j]; ar[j] = tmp;' },
+  { lineNum: 26, code: '            i++;' },
+  { lineNum: 27, code: '            j--;' },
+  { lineNum: 28, code: '        } else {' },
+  { lineNum: 29, code: '            i++;' },
+  { lineNum: 30, code: '        }' },
+  { lineNum: 31, code: '    }' },
+  { lineNum: 32, code: '    ar[low] = ar[j];' },
+  { lineNum: 33, code: '    ar[j] = pi;' },
+  { lineNum: 34, code: '    return j;' },
+  { lineNum: 35, code: '}' },
+  { lineNum: 36, code: '' },
+  { lineNum: 37, code: 'void quickSort(int ar[], int low, int high) {' },
+  { lineNum: 38, code: '    if (low < high) {' },
+  { lineNum: 39, code: '        int pi = partition(ar, low, high);' },
+  { lineNum: 40, code: '        quickSort(ar, low, pi - 1);' },
+  { lineNum: 41, code: '        quickSort(ar, pi + 1, high);' },
+  { lineNum: 42, code: '    }' },
+  { lineNum: 43, code: '}' },
+];
+
+export const C_CODE_FIRST: CSourceCodeLine[] = [
+  { lineNum: 1, code: 'int partition(int ar[], int low, int high) {' },
+  { lineNum: 2, code: '    int pi = ar[low];' },
+  { lineNum: 3, code: '    int i = low + 1;' },
+  { lineNum: 4, code: '    int j = high;' },
+  { lineNum: 5, code: '    int tmp;' },
+  { lineNum: 6, code: '    while (i <= j) {' },
+  { lineNum: 7, code: '        while (ar[i] <= pi && i <= high)' },
+  { lineNum: 8, code: '            i++;' },
+  { lineNum: 9, code: '        while (ar[j] > pi && j >= low)' },
+  { lineNum: 10, code: '            j--;' },
+  { lineNum: 11, code: '        if (i < j) {' },
+  { lineNum: 12, code: '            tmp = ar[i];' },
+  { lineNum: 13, code: '            ar[i] = ar[j];' },
+  { lineNum: 14, code: '            ar[j] = tmp;' },
+  { lineNum: 15, code: '            i++;' },
+  { lineNum: 16, code: '            j--;' },
+  { lineNum: 17, code: '        }' },
+  { lineNum: 18, code: '    }' },
+  { lineNum: 19, code: '    tmp = ar[low];' },
+  { lineNum: 20, code: '    ar[low] = ar[j];' },
+  { lineNum: 21, code: '    ar[j] = tmp;' },
+  { lineNum: 22, code: '    return j;' },
+  { lineNum: 23, code: '}' },
+  { lineNum: 24, code: '' },
+  { lineNum: 25, code: 'void quickSort(int ar[], int low, int high) {' },
+  { lineNum: 26, code: '    if (low < high) {' },
+  { lineNum: 27, code: '        int pi = partition(ar, low, high);' },
+  { lineNum: 28, code: '        quickSort(ar, low, pi - 1);' },
+  { lineNum: 29, code: '        quickSort(ar, pi + 1, high);' },
+  { lineNum: 30, code: '    }' },
+  { lineNum: 31, code: '}' },
+];
+
+export const C_CODE_LAST: CSourceCodeLine[] = [
+  { lineNum: 1, code: 'int partition(int ar[], int low, int high) {' },
+  { lineNum: 2, code: '    int pi = ar[high];  /* Lomuto pivot */' },
+  { lineNum: 3, code: '    int i = low - 1;' },
+  { lineNum: 4, code: '    int tmp;' },
+  { lineNum: 5, code: '    for (int j = low; j < high; j++) {' },
+  { lineNum: 6, code: '        if (ar[j] <= pi) {' },
+  { lineNum: 7, code: '            i++;' },
+  { lineNum: 8, code: '            tmp = ar[i];' },
+  { lineNum: 9, code: '            ar[i] = ar[j];' },
+  { lineNum: 10, code: '            ar[j] = tmp;' },
+  { lineNum: 11, code: '        }' },
+  { lineNum: 12, code: '    }' },
+  { lineNum: 13, code: '    tmp = ar[i + 1];' },
+  { lineNum: 14, code: '    ar[i + 1] = ar[high];' },
+  { lineNum: 15, code: '    ar[high] = tmp;' },
+  { lineNum: 16, code: '    return (i + 1);' },
+  { lineNum: 17, code: '}' },
+  { lineNum: 18, code: '' },
+  { lineNum: 19, code: 'void quickSort(int ar[], int low, int high) {' },
+  { lineNum: 20, code: '    if (low < high) {' },
+  { lineNum: 21, code: '        int pi = partition(ar, low, high);' },
+  { lineNum: 22, code: '        quickSort(ar, low, pi - 1);' },
+  { lineNum: 23, code: '        quickSort(ar, pi + 1, high);' },
+  { lineNum: 24, code: '    }' },
+  { lineNum: 25, code: '}' },
+];
+
+export function getCCodeForStrategy(strategy: PivotStrategy): CSourceCodeLine[] {
+  switch (strategy) {
+    case 'MEDIAN_OF_THREE':
+      return C_CODE_MEDIAN_OF_THREE;
+    case 'FIRST':
+      return C_CODE_FIRST;
+    case 'LAST':
+      return C_CODE_LAST;
+    default:
+      return C_CODE_MEDIAN_OF_THREE;
+  }
+}
